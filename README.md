@@ -17,11 +17,16 @@ _SIFA_ is written in `R` and `C++`. Please install the following packages in R p
 
 _SIFA_  takes an `.Rdata` file as input. 
 
-The `.Rdata` file should contain a list `obs_data` with required fields: `obs_data$D` for total reads matrix, `obs_data$X` for mutant reads matrix, and `obs_data$loc` for mutation location matrix, and one optional field: `obs_data$segments` for loci segmentation matrix. 
+The `.Rdata` file should contain a list `obs_data` with required fields: 
 
-The total reads (`D`) and mutation location (`loc`) data will be used to calculate genome segments, unless the optional input `obs_data$segments` is given.
+- `obs_data$D` for total reads matrix
+- `obs_data$X` for mutant reads matrix
+- `obs_data$loc` for mutation location matrix 
+- `obs_data$segments` for loci segmentation matrix. 
 
-**Required inputs**:
+When `obs_data$segments` is not provided, we will use the information provided in `obs_data$loc` and `obs_data$D` to call the genome segments.
+
+**Input format**:
 
 - `obs_data$D` and `obs_data$X` should take the following format:
 
@@ -43,8 +48,6 @@ The total reads (`D`) and mutation location (`loc`) data will be used to calcula
   23 | 153383479 | 
 For loci in non-coding regions, the `gene` column can be left blank. 
 
-**Optional inputs:**
-
 - `obs_data$segments` should take the following format:
 
   segments | start | end 
@@ -58,17 +61,18 @@ Each row of the matrix represents one segment, with the two entries marking the 
 
 ## Using _SIFA_
 
-To use _SIFA_, please set R working directory to `SIFA` after cloning this repository. Make sure you have all the dependencies correctly installed, then run source code `SIFA_app.R` line by line.
+To use _SIFA_, please set R working directory to `SIFA_package` after cloning this repository. Make sure you have all the dependencies correctly installed, load your input `.Rdata` file, and then open source code `SIFA_app.R` execute the commands line by line following the instructions below.
 
-- In the _MODEL INPUT_ section of the code, load the `.Rdata` where your inputs are located, specify random seed `myseed`, and specify the folder `foldername` to store output files (a new folder will be created if it does not exist). For example: 
+- In the _MODEL INPUT_ section of the code, load the `.Rdata` where your inputs are saved, specify random seed `myseed`, and specify the folder `foldername` to store output files (a new folder will be created if it does not exist). For example: 
 
 	```r
-#############################################
-########## MODEL INPUT ######################
-#############################################
-load("example.Rdata")
-myseed = 1                # set random seed
-foldername = "temp_out"   # set output foldername
+	#############################################
+	########## MODEL INPUT ######################
+	#############################################
+	load("example.Rdata")
+	myseed = 1                # set random seed
+	foldername = "temp_out"   # set output foldername
+	dir.create(foldername)  # folder where outputs are saved
 	```
 
 - Next, you need to specify Bayesian sampling parameters in `specify_pars.R`. For most of the parameters, default values work just fine. Some of the parameters you can change are:
@@ -86,12 +90,13 @@ foldername = "temp_out"   # set output foldername
 	Nclone=c(3:7) # candidate subclone numbers K
 	```
 
-- Implement the following files:
+- Implement the following source files or functions:
 	- `sampler.R` to perform sampling
-	- `DIC_select.R` to perform model selection
-	- `Visualization.R` for results visualization   
-	Visualization results will list top 3 frequent trees (when more than 3 tree structures exist) in posterior samples, and display corresponding parameter estimations.
+	- `Model_select.R` to perform model selection
+	- `Fit_visual(foldername,X,D)` for results visualization   
+	Visualization results will list top 3 frequent trees (when >= 3 tree structures exist) in posterior samples, and display corresponding parameter estimations.
 
-During the sampling process, all samples for each individual K will be stored in one `.Rdata` file.
+During the sampling process, samples for each individual K will be stored in one `.Rdata` file.
+
 ## Contact
 Please feel free to contact <li.zeng@yale.edu> if you have any question.

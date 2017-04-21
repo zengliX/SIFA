@@ -61,16 +61,10 @@ Params$segments=segments
 ############  specify MCMC parameters ##################
 ########################################################
 
-
-
-
- # MCMC_par$burnin=4000  # burnin sample size
- # MCMC_par$Nsamp=4000   # number of samples for inference
- # MCMC_par$Ntune=2000  # number of samples used for adaptive parameter tuning
- MCMC_par$burnin=150  # burnin sample size
- MCMC_par$Nsamp=150   # number of samples for inference
- MCMC_par$Ntune=150  # number of samples used for adaptive parameter tuning
-
+MCMC_par$burnin=4000  # burnin sample size
+MCMC_par$Nsamp=4000   # number of samples for inference
+MCMC_par$Ntune=2000  # number of samples used for adaptive parameter tuning
+ 
 
 
 MCMC_par$swap_interval=30 # make Matroplis Hastings move in every how many samples
@@ -94,4 +88,4 @@ adapt_par=lapply(c(1:MCMC_par$Nchain),function(x){adapt_par})
 
 # candidate subclone numbers K
 # need K >= 2
-Nclone=c(3:7) 
+Nclone=c(2:7) 

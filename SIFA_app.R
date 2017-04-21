@@ -3,6 +3,8 @@
 ############# load packages ##################################
 ################################################################
 
+# setwd("path/to/SIFA_package")  
+
 require(tidyr)
 require(copynumber)
 require(ggplot2)
@@ -28,12 +30,11 @@ sourceCpp("params.cpp")
 source("Visualization.R")
 
 
-
 #################################################################
 ########## MODEL INPUT ############################################
 #################################################################
 
-load("example.Rdata")
+# load("example.Rdata")
 myseed = 1               # set random seed
 foldername= "temp_out"         # set output foldername
 dir.create(foldername)  # folder where outputs are saved

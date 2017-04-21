@@ -6,7 +6,7 @@
 
 for( Nc in Nclone )
 {
-  if(NC<2) stop("K need to be >= 2")
+  if(Nc<2) stop("K need to be >= 2")
   
   ##### number of subclones
   Params$K=Nc

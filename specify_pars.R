@@ -38,9 +38,6 @@ Params$zeta=10^-2
 ##### read depth parameter
 Params$phi=phi
 
-#### over_dispersion hyper-parameter
-Params$lambda = 10
-
 
 ########################################################
 ############## get segments ############################

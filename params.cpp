@@ -215,7 +215,7 @@ double log_p_theta_cpp(arma::vec theta_t,double phi_t, List samp, arma::vec xt,
 NumericVector samp_theta_cpp(arma::vec theta_t, int i, double phi_t, List samp,
                     arma::vec xt, arma::vec dt, List Params,double p0, double tune_par,
                     double temper, double err)
-{ 
+{
   NumericVector out(2);
 
   double theta0= theta_t[i];
@@ -259,7 +259,7 @@ NumericVector samp_theta_cpp(arma::vec theta_t, int i, double phi_t, List samp,
 //[[Rcpp::export]]
 arma::mat samp_theta_all (List samp, List Params, arma::mat X, arma::mat D,
                              double theta_tune,double temper)
-{  
+{
   arma::mat out=as<arma::mat>(samp["theta"]);
   int K=out.n_rows, T0=out.n_cols;
   arma::vec phi= as<arma::vec>(Params["phi"]);
@@ -325,7 +325,7 @@ double log_p_L_cpp(arma::vec Lj, int j, arma::mat D, arma::mat X, List samp, Lis
   arma::mat Frac = as<arma::mat>(samp["Frac"]);
   arma::mat Z =  as<arma::mat>(samp["Z"]);
   arma::vec phi = as<arma::vec>(Params["phi"]);
-  
+
   arma::mat ave_CN = (Lj.t() * Frac);  // row vector of average CN
   arma::mat ave_mut = (Z.row(j-1) * Frac) ; // row vector of average mut
   arma::mat p = ave_mut/ave_CN;
@@ -385,7 +385,7 @@ NumericVector Gibbs_L_cpp(arma::uvec indVec, List samp, arma::mat X, arma::mat D
     p_vec.at(0)=p0;
   }
 
-  
+
   int ind=1;
   arma::vec new_l(K);
   for (int k=2; k<=K; k++){
@@ -632,7 +632,11 @@ arma::mat log_prob_X(arma::mat X, arma::mat D, arma::mat P )
   arma::mat out(J,t );
   for (int i=0; i<J; i++){
     for(int j=0; j<t; j++){
-      out.at(i,j) = R::dbinom(X.at(i,j),D.at(i,j),P.at(i,j),1);
+      if(P.at(i,j)>=1){
+        out.at(i,j) = -999999999;
+      } else{
+        out.at(i,j) = R::dbinom(X.at(i,j),D.at(i,j),P.at(i,j),1);
+      }
     }
   }
   return out;
@@ -689,7 +693,7 @@ double log_prior_all(List samp, List Params, double temper)
 
 // omega prior
   // out +=  log_prior_omega(omega, Params);
-  
+
   return out/temper;
 }
 

@@ -105,13 +105,20 @@ To use _SIFA_, please set R working directory to `SIFA_package` after cloning th
 During the sampling process, samples for each individual K will be stored in one `.Rdata` file.
 
 ## Results Examples
-- Estimated phylogenetic tree:
+- Estimated phylogenetic tree:   
+
 ![](./figures/tree.png)
-- Estimated subclone mutated copy numbers:
+
+- Estimated subclone mutated copy numbers:    
+ 
 ![](./figures/Z.png)
-- Estimated subclone total copy numbers:
+
+- Estimated subclone total copy numbers:   
+
 ![](./figures/L.png)
-- Estimated subclone fractions across samples:
+
+- Estimated subclone fractions across samples:  
+ 
 ![](./figures/Frac.png)
 
 ## Contact

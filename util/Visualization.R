@@ -37,7 +37,7 @@ Fit_visual=function(targ_folder,X,D)
     load(cur_rdata)
     
     # focus on chain 1    
-    chain1=Trace
+    chain1=sample_organize(Trace)
     
     #likelihood trace
     p_vec=get_samp(chain1,'likelihood')
@@ -85,27 +85,27 @@ Fit_visual=function(targ_folder,X,D)
         theme(text = element_text(size=12), plot.title = element_text(hjust = 0.5))
       plot(p)
       
-      chain2_len=length(chain2)
-      orgn_distr=matrix(0,Params$J,chain2_len)
-      for (z in 1:chain2_len){
-        temp=temp_Z[,,z]
-        orgn_distr[,z]=Z_to_Zo_cpp(temp)[,1]
-      }
-      mut_g=apply(orgn_distr,1,Mode)
-      
-      
-      # grouped coding mut VAF
-      P=X/D
-      colnames(P) = samp_names
-      p=group_line_plot(P,mut_g,title = 'coding mut VAF by group') +
-        theme(text = element_text(size=12), plot.title = element_text(hjust = 0.5))
-      plot(p)
-      
-      
-      # plot for each group
-      pic= group_line_plot(P,mut_g,title = 'coding mut VAF by group',sep=T)+
-        theme(text = element_text(size=12), plot.title = element_text(hjust = 0.5))
-      plot(pic)
+      # chain2_len=length(chain2)
+      # orgn_distr=matrix(0,Params$J,chain2_len)
+      # for (z in 1:chain2_len){
+      #   temp=temp_Z[,,z]
+      #   orgn_distr[,z]=Z_to_Zo_cpp(temp)[,1]
+      # }
+      # mut_g=apply(orgn_distr,1,Mode)
+      # 
+      # 
+      # # grouped coding mut VAF
+      # P=X/D
+      # colnames(P) = samp_names
+      # p=group_line_plot(P,mut_g,title = 'coding mut VAF by group') +
+      #   theme(text = element_text(size=12), plot.title = element_text(hjust = 0.5))
+      # plot(p)
+      # 
+      # 
+      # # plot for each group
+      # pic= group_line_plot(P,mut_g,title = 'coding mut VAF by group',sep=T)+
+      #   theme(text = element_text(size=12), plot.title = element_text(hjust = 0.5))
+      # plot(pic)
     }
     
     dev.off() 
@@ -124,10 +124,10 @@ Fit_visual=function(targ_folder,X,D)
   dev.off()
 }
 
-Mode = function(x) {
-  ux = unique(x)
-  ux[which.max(tabulate(match(x, ux)))]
-}
+# Mode = function(x) {
+#   ux = unique(x)
+#   ux[which.max(tabulate(match(x, ux)))]
+# }
 
 
 

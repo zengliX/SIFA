@@ -68,7 +68,7 @@ MCMC_par$swap_interval=30 # make Matroplis Hastings move in every how many sampl
 MCMC_par$Nchain=5 # number of paralel chains
 MCMC_par$delta_T=0.35
 
- Temperature=seq(1,by=MCMC_par$delta_T,length.out = MCMC_par$Nchain )  # temperatures
+Temperature=seq(1,by=MCMC_par$delta_T,length.out = MCMC_par$Nchain )  # temperatures
 
 ######################################################
 ############## adaptive tuning parameter ##############
@@ -85,4 +85,4 @@ adapt_par=lapply(c(1:MCMC_par$Nchain),function(x){adapt_par})
 
 # candidate subclone numbers K
 # need K >= 2
-Nclone=c(2:7) 
+Nclone=c(3:7) 

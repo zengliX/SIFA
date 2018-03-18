@@ -2,6 +2,9 @@ _SIFA_ (tumor **S**ubclone **I**dentification by **F**eature **A**llocation) is 
 
 Currently SIFA requires sample size to be at least two, since a unique tree cannot be identified with only one sample.
 
+## Reference
+_Zeng, L., Warren, J.L. and Zhao, H. (2017) Phylogeny-based tumor subclone identification using Bayesian feature allocation model_ [\[pdf\]]()
+
 ## Software dependencies
 _SIFA_ is written in `R` and `C++`. Please install the following packages in R prior to implementing our software:
 
@@ -90,13 +93,26 @@ To use _SIFA_, please set R working directory to `SIFA_package` after cloning th
 	Nclone=c(3:7) # candidate subclone numbers K
 	```
 
-- Implement the following source files or functions:
+- run the remaining sections one by one:
 	- `sampler.R` to perform sampling
-	- `Model_select.R` to perform model selection
-	- `Fit_visual(foldername,X,D)` for results visualization   
-	Visualization results will list top 3 frequent trees (when >= 3 tree structures exist) in posterior samples, and display corresponding parameter estimations.
+	- `Model_select.R` to perform model selection. Plot of model selection will be saved in `selection.pdf`
+	- `Fit_visual(foldername,X,D)` for results visualization:      
+		- Visualization results will list top 3 frequent trees (when >= 3 tree structures exist) in posterior samples, and display corresponding parameter estimations.
+	- `get_point_estimate()`:
+		- get parameter point estimates from a given posterior sample `.Rdata` file
+		- will identify up to top 3 trees from posterior samples, and calculate point estimates for each tree
 
 During the sampling process, samples for each individual K will be stored in one `.Rdata` file.
+
+## Results Examples
+- Estimated phylogenetic tree:
+![](./figures/tree.png)
+- Estimated subclone mutated copy numbers:
+![](./figures/Z.png)
+- Estimated subclone total copy numbers:
+![](./figures/L.png)
+- Estimated subclone fractions across samples:
+![](./figures/Frac.png)
 
 ## Contact
 Please feel free to contact <li.zeng@yale.edu> if you have any question.

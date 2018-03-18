@@ -21,13 +21,13 @@ require("igraph")
 ######## load functions ################################
 ########################################################
 
-source('./assist_fun.R')
-source('./main_fun_II.R')
-source('./tree_samp_fun.R')
-source('./par_samp.R')
-source('./call_seg.R')
-sourceCpp("params.cpp")
-source("Visualization.R")
+source('./util/assist_fun.R')
+source('./util/main_fun_II.R')
+source('./util/tree_samp_fun.R')
+source('./util/par_samp.R')
+source('./util/call_seg.R')
+sourceCpp("./util/params.cpp")
+source("util/Visualization.R")
 
 
 #################################################################
@@ -58,14 +58,14 @@ par_disp(Params, MCMC_par)
 ##############################################
 ######## sampling ##########################
 ############################################
-source("sampler.R")
+source("./util/sampler.R")
 
 
 ##################################################
 ########## model selection:   ###############
 ##################################################
 
-source("Model_select.R")
+source("./util/Model_select.R")
 pdf(paste(foldername,"/","selection.pdf",sep=""))
 BFE_calc(X,D,Temperature,foldername)
 dev.off()
@@ -78,8 +78,13 @@ cat("Visualizing sampling results: \n")
 Fit_visual(foldername,X,D)
 
 
-
-
+########################################################
+########## get point estimates ###############
+########################################################
+source("./util/point_estimate.R")
+# specify 
+#eg: sample_Rdata = "seed1_K2.Rdata"
+point_est = get_point_estimate(foldername,sample_Rdata)
 
 
 

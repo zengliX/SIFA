@@ -20,11 +20,11 @@ genotype_plot=function(Z,xname='subclone id',yname='mutation id',titlename=NULL)
 CN_plot=function(L,xname='subclone id',yname='mutation id',titlename=NULL)
 {
   rownames(L)=colnames(L)=c()
-
+  upper_lim = max(4,max(L))
   L=as.matrix(L)
   temp=melt(L) 
   p <- ggplot(temp, aes(X2,X1,fill=value) ) + geom_tile() +
-        scale_fill_gradient2(low = "green", high = "red",mid='black',midpoint = 2,limit=c(0,4)) +
+        scale_fill_gradient2(low = "green", high = "red",mid='black',midpoint = 2,limit=c(0,upper_lim)) +
     theme_minimal() +
   xlab(xname) +
     ylab(yname) +
@@ -230,11 +230,12 @@ get_samp=function(MCMCout,var_name,subset=NULL)
 ################ evaluate one posteriror sample ################
 ################################################################
 
-clone_sort=function(Z1,Z0,Params)  # pick permutation with minimum error on Z
+clone_sort=function(Z1,Z0)  # pick permutation with minimum error on Z
 {
   #Z1: sample mutation matrix
   #Z0: true mutation matrix
-  a=Params$K
+  a=ncol(Z0)
+  J = nrow(Z0)
   ords=permutations(a-1,a-1,v=2:a) # all possible permutations excluding normal subclone
   ords=cbind(1,ords)
   
@@ -252,7 +253,7 @@ clone_sort=function(Z1,Z0,Params)  # pick permutation with minimum error on Z
     }
   }
   
-  v=v/(Params$K*Params$J)
+  v=v/(a*J)
   
   out=list(measure=v,ord=ords[loc,])
   out
@@ -262,7 +263,7 @@ clone_sort=function(Z1,Z0,Params)  # pick permutation with minimum error on Z
 ############################################################################
 ################ get samples with different tree structures ################
 ############################################################################
-
+# get all tree structures from posterior samples
 out_trees=function(MCMCout)
 {
   l=length(MCMCout)
@@ -291,18 +292,62 @@ onetree_samp=function(MCMCout,tree)
 }
 
 
-### change tree after reordering subclones
-get_newtree=function(old_tree,ord)
-{
- K = length(old_tree) 
- out = old_tree
- for(i in 2:K){
-   out[i] = which(ord == old_tree[ord[i]])
- }
- out
+### organize tree by new order
+get_newtree = function(t0, new_ord){
+  stopifnot(length(new_ord)==length(t0))
+  l = length(new_ord)
+  new_t = c(0:(l-1))
+  if (l>2){
+    for (i in 2:l){
+      new_t[i] = which(new_ord==t0[new_ord[i]])
+    }
+  }
+  return(new_t)
 }
 
 
+### reduce duplicated trees
+sample_organize =  function(trace) {
+  # organize 
+  l = length(trace)
+  stopifnot(l>=2)
+  # organize samples
+  Z_list = list()
+  Z_list[[1]] = trace[[1]]$Z
+  K = ncol(trace[[1]]$Z)
+  
+  # re-organize each sample
+  for(i in 2:length(trace)){
+    cur_Z = trace[[i]]$Z
+    err_vec =c(1:length(Z_list))
+    ord_list=list()
+    for(j in 1:length(Z_list)){
+      c_sort = clone_sort(cur_Z,Z_list[[j]])
+      err_vec[j] = c_sort$measure
+      ord_list[[j]] = c_sort$ord
+    }
+    
+    ord = ord_list[[which.min(err_vec)]]
+    
+    if( !all(ord == seq(1,K))){
+      new_t = get_newtree(trace[[i]]$Ttree,ord)
+      if(tree_check(new_t)){
+        trace[[i]]$Ttree = new_t
+        trace[[i]]$theta =  trace[[i]]$theta[ord,]
+        trace[[i]]$Frac = trace[[i]]$Frac[ord]
+        trace[[i]]$L = trace[[i]]$L[,ord]
+        trace[[i]]$Z = trace[[i]]$Z[,ord]
+      } else {
+        Z_list[[length(Z_list)+1]] =  cur_Z 
+      }
+    }
+  }
+  
+  return(trace)
+}
+
+
+# check if a vector represents a tree
 tree_check=function(tree)
 {
   out=T

@@ -3,7 +3,7 @@ _SIFA_ (tumor **S**ubclone **I**dentification by **F**eature **A**llocation) is 
 Currently SIFA requires sample size to be at least two, since a unique tree cannot be identified with only one sample.
 
 ## Reference
-_Zeng, L., Warren, J.L. and Zhao, H. (2017) Phylogeny-based tumor subclone identification using Bayesian feature allocation model_ [\[pdf\]]()
+_Zeng, L., Warren, J.L. and Zhao, H. (2017) Phylogeny-based tumor subclone identification using Bayesian feature allocation model_ [\[pdf\]](https://arxiv.org/abs/1803.06393)
 
 ## Software dependencies
 _SIFA_ is written in `R` and `C++`. Please install the following packages in R prior to implementing our software:

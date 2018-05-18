@@ -1,3 +1,5 @@
+# _SIFA_ for tumor subclone inference
+
 _SIFA_ (tumor **S**ubclone **I**dentification by **F**eature **A**llocation) is a Baysian method to identify tumor subclones using WGS data. This page will guide you through the basic steps of using _SIFA_.
 
 Currently SIFA requires sample size to be at least two, since a unique tree cannot be identified with only one sample.
